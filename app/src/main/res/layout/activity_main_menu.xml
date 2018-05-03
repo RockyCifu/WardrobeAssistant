@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <!--
+         android:onClick=""
+    add to each button to create event on click. add the method name in the paratheses
+    -->
+
+
+    <Button
+        android:id="@+id/add"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="384dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="1dp"
+        android:text="Add To Wardrobe"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        app:layout_constraintBottom_toTopOf="@+id/browseWardrobe"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/browseWardrobe"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="386dp"
+        android:layout_height="61dp"
+        android:text="Browse Wardrobe"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        app:layout_constraintBottom_toTopOf="@+id/assembleOutfit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add" />
+
+    <Button
+        android:id="@+id/assembleOutfit"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="383dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="1dp"
+        android:text="Assemble Outfit"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/browseWardrobe" />
+
+
+    <Button
+        android:id="@+id/browseOutfit"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="385dp"
+        android:layout_height="66dp"
+        android:text="Browse Outfits"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        app:layout_constraintBottom_toTopOf="@+id/browseWishList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/assembleOutfit" />
+
+    <Button
+        android:id="@+id/browseWishList"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="387dp"
+        android:layout_height="63dp"
+        android:text="Browse Wish List"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        app:layout_constraintBottom_toTopOf="@+id/ManageDonation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/browseOutfit" />
+
+    <Button
+        android:id="@+id/ManageDonation"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="382dp"
+        android:layout_height="63dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginStart="1dp"
+        android:text="Manage Donation List"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        app:layout_constraintBottom_toTopOf="@+id/manageTravel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/browseWishList" />
+
+    <Button
+        android:id="@+id/manageTravel"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="382dp"
+        android:layout_height="62dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginStart="1dp"
+        android:text="Manage Travel List"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        app:layout_constraintBottom_toTopOf="@+id/browseFriends"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ManageDonation" />
+
+    <Button
+        android:id="@+id/browseFriends"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="386dp"
+        android:layout_height="65dp"
+        android:text="Browse Friends"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/manageTravel" />
+
+</android.support.constraint.ConstraintLayout>

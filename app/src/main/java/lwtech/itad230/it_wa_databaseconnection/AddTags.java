@@ -56,8 +56,6 @@ public class AddTags extends AppCompatActivity implements View.OnClickListener{
         progressDialog.setMessage("Adding tags...");
         progressDialog.show();
 
-        //Toast.makeText(getApplicationContext(),"AAAAAAAAAA",Toast.LENGTH_LONG).show();
-
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
                 Constants.URL_ADDTAG,

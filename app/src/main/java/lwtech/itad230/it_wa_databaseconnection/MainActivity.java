@@ -19,7 +19,6 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,8 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void registerUser()
     {
 
-        final String username = editTextUsername.getText().toString().trim();
-        final String password = editTextPassword.getText().toString().trim();
+        final String username = editTextUsername.getText().toString()/*.trim()*/;
+        final String password = editTextPassword.getText().toString()/*.trim()*/;
 
         progressDialog.setMessage("Registering user...");
         progressDialog.show();
@@ -85,6 +84,61 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //requestQueue.add(stringRequest);
         RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
     }
+
+    private void userLogin()
+    {
+        final String username = editTextUsername.getText().toString()/*.trim()*/;
+        final String password = editTextPassword.getText().toString()/*.trim()*/;
+
+        progressDialog.show();
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.POST,
+                Constants.URL_LOGIN,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            if(!obj.getBoolean("error"))
+                            {
+                                SharedPrefManager.getInstance(getApplicationContext()).userlogin(
+                                        obj.getInt("user_id"),
+                                        obj.getString("user_name")
+                                );
+
+                                /*Toast.makeText(getApplicationContext(),"Successfully Logged in",Toast.LENGTH_LONG).show();*/
+                                startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
+                            }
+                            else
+                            {
+                                Toast.makeText(getApplicationContext(),obj.getString("message"),Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressDialog.dismiss();
+                    }
+                }
+        )
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("user_name", username);
+                params.put("password",password);
+                return params;
+            }
+        };
+        RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
+    }
+
     @Override
     public void onClick(View view)
     {
@@ -92,7 +146,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             registerUser();
         }
         if(view == buttonLogin) {
-            startActivity(new Intent(this, LoginActivity.class));
+            //startActivity(new Intent(this, LoginActivity.class));
+            userLogin();
+
         }
     }
 }

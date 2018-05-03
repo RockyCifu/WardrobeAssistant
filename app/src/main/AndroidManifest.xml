@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".AddTags"></activity>
+        <activity android:name=".AddTags" />
+        <activity android:name=".MainMenuActivity"></activity>
     </application>
 
 </manifest>
