@@ -1,3 +1,49 @@
 <resources>
     <string name="app_name">WardrobeAssistant</string>
+
+    <string-array name="colors_array">
+        <item></item>
+        <item>Black</item>
+        <item>White</item>
+        <item>Purple</item>
+        <item>Violet</item>
+        <item>Red</item>
+        <item>Pink</item>
+        <item>Orange</item>
+        <item>Yellow</item>
+        <item>Green</item>
+        <item>Blue</item>
+    </string-array>
+
+    <string-array name="type_array">
+        <item></item>
+        <item>Hat</item>
+        <item>Dress</item>
+        <item>Skirt</item>
+        <item>Pants</item>
+        <item>Shirt</item>
+        <item>Coat</item>
+        <item>Shoes</item>
+        <item>Accessory</item>
+    </string-array>
+
+    <string-array name="season_array">
+        <item></item>
+        <item>Spring/Summer</item>
+        <item>Fall/Winter</item>
+    </string-array>
+
+    <string-array name="location_array">
+        <item></item>
+        <item>Closet:1</item>
+        <item>Closet:2</item>
+        <item>Closet:3</item>
+        <item>Drawer:1</item>
+        <item>Drawer:2</item>
+        <item>Drawer:3</item>
+        <item>Drawer:4</item>
+        <item>Drawer:5</item>
+        <item>Drawer:6</item>
+    </string-array>
+
 </resources>

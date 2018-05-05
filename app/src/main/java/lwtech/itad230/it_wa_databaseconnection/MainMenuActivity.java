@@ -10,6 +10,7 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
 
     private Button buttonAdd, buttonBrowseWardrobe, buttonAssembleOutfit, buttonBrowseOutfit,buttonBrowseWishList;
     private Button buttonManageDonation, buttonManageTravel, buttonBrowseFriends;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +40,7 @@ public class MainMenuActivity extends AppCompatActivity implements View.OnClickL
     {
         if(view == buttonAdd)
         {
-            startActivity(new Intent(getApplicationContext(), AddTags.class));
+            startActivity(new Intent(getApplicationContext(), AddItem.class));
         }
         if(view == buttonBrowseWardrobe)
         {

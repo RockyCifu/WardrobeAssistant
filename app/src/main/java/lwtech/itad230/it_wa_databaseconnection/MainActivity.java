@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText editTextUsername, editTextPassword;
     private Button buttonRegister, buttonLogin;
     private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,8 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return params;
             }
         };
-        //RequestQueue requestQueue = Volley.newRequestQueue(this);
-        //requestQueue.add(stringRequest);
+
         RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
     }
 
