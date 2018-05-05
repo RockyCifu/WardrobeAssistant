@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/image_preview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:gravity="bottom">
+        <TextView
+            android:id="@+id/apparel_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Clothing Type"
+            android:paddingTop="10px"
+            android:paddingBottom="10px"
+            android:textStyle="bold"
+            android:textAlignment="center"/>
+
+        <Spinner
+            android:id="@+id/apparel_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10px"
+            android:paddingBottom="10px"/>
+
+        <TextView
+            android:id="@+id/item_color_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Item Color"
+            android:paddingTop="10px"
+            android:paddingBottom="10px"
+            android:textStyle="bold"
+            android:textAlignment="center"/>
+
+        <Spinner
+            android:id="@+id/item_color_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10px"
+            android:paddingBottom="10px"/>
+
+        <TextView
+            android:id="@+id/season_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Season"
+            android:paddingTop="10px"
+            android:paddingBottom="10px"
+            android:textStyle="bold"
+            android:textAlignment="center"/>
+
+        <Spinner
+            android:id="@+id/season_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10px"
+            android:paddingBottom="10px"/>
+
+        <TextView
+            android:id="@+id/location_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:paddingTop="10px"
+            android:paddingBottom="10px"
+            android:textStyle="bold"
+            android:textAlignment="center"/>
+
+        <Spinner
+            android:id="@+id/location_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10px"
+            android:paddingBottom="10px"/>
+
+        <Button
+            android:id="@+id/btn_take_picture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Take Picture"
+            android:paddingTop="10px"
+            android:paddingBottom="10px"/>
+
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:paddingTop="10px"
+            android:paddingBottom="10px"/>
+    </LinearLayout>
+</LinearLayout>
