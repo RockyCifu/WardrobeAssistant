@@ -2,6 +2,7 @@ package lwtech.itad230.it_wa_databaseconnection;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -33,6 +34,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //If user is already logged in go to menu activity
+        if(SharedPrefManager.getInstance(this).isLoggedIn())
+        {
+            finish();
+            startActivity(new Intent(this, MainMenuActivity.class));
+            return;
+        }
         editTextUsername = (EditText)findViewById(R.id.editTextUsername);
         editTextPassword = (EditText)findViewById(R.id.editTextPassword);
 
@@ -109,6 +117,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                                 /*Toast.makeText(getApplicationContext(),"Successfully Logged in",Toast.LENGTH_LONG).show();*/
                                 startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
+                                //Finish the activity because on clicking screen should not show the login screen
+                                finish();
                             }
                             else
                             {

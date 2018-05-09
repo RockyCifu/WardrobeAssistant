@@ -50,7 +50,5 @@ public class SharedPrefManager {
         editor.clear();
         editor.apply();
         return true;
-
-
     }
 }
