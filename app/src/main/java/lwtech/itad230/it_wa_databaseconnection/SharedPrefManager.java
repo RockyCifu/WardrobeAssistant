@@ -3,8 +3,6 @@ package lwtech.itad230.it_wa_databaseconnection;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.android.volley.toolbox.StringRequest;
-
 public class SharedPrefManager {
     private static SharedPrefManager mInstance;
     private static Context mCtx;
@@ -12,6 +10,10 @@ public class SharedPrefManager {
     private static final String SHARED_PREF_NAME = "mysharedpref12";
     private static final String KEY_USERNAME = "user_name";
     private static final String KEY_USERID = "user_id";
+    private static final String KEY_FILTERTYPE = "filter_type";
+    private static final String KEY_FILTERVALUE= "filter_value";
+    private static final String KEY_DISPLAYSTATUS = "set_display";
+
     private SharedPrefManager(Context context) {
         mCtx = context;
     }
@@ -51,4 +53,38 @@ public class SharedPrefManager {
         editor.apply();
         return true;
     }
+
+    public int getUserId()
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(KEY_USERID, 0);
+    }
+    public void setFilterType(String type)
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_FILTERTYPE, type);
+        editor.apply();
+    }
+
+    public void setFilterValue(String value)
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_FILTERVALUE, value);
+        editor.apply();
+    }
+
+    public String getFilterType()
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_FILTERTYPE,null);
+    }
+    public String getFilterValue()
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_FILTERVALUE, null);
+    }
+
+
 }
