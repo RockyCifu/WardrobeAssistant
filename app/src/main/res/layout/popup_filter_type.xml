@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp"
+    android:paddingTop="25dp"
+    android:paddingBottom="25dp"
+    android:orientation="vertical"
+    android:background="@drawable/popupborder"
+    >
+
+
+    <RadioGroup
+        android:id="@+id/radioScreenMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:id="@+id/filterNone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            style="@style/radioTitle"
+            android:text="All" />
+
+        <RadioButton
+            android:id="@+id/filterColor"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            style="@style/radioTitle"
+            android:layout_height="wrap_content"
+            android:text="Color" />
+
+        <RadioButton
+            android:id="@+id/filterApparelType"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            style="@style/radioTitle"
+            android:layout_height="wrap_content"
+            android:text="Apparel Type" />
+
+        <RadioButton
+            android:id="@+id/filterSeason"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            style="@style/radioTitle"
+            android:layout_height="wrap_content"
+            android:text="Season" />
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnOk"
+            android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:text="Ok"
+            android:layout_marginRight="20dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"/>
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:text="Cancel"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp"
+    android:paddingTop="25dp"
+    android:paddingBottom="25dp"
+    android:orientation="vertical"
+    android:background="@drawable/popupborder">
+
+
+    <RadioGroup
+        android:id="@+id/filterSeasonSelected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:id="@+id/seasonSpringSummer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            style="@style/radioTitle"
+            android:text="SpringSummer" />
+
+        <RadioButton
+            android:id="@+id/seasonFallWinter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            style="@style/radioTitle"
+            android:text="FallWinter" />
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnOk"
+            android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:text="Ok"
+            android:layout_marginRight="20dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"/>
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:text="Cancel"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"/>
+    </LinearLayout>
+
+</LinearLayout>
