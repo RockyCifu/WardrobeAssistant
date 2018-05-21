@@ -3,11 +3,13 @@ package lwtech.itad230.it_wa_databaseconnection;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +25,14 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,9 +42,10 @@ public class AddItem extends android.support.v4.app.Fragment implements View.OnC
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private String phpUrl = Constants.URL_ADDITEM;
-    private Bitmap scaledBitmap;
     private Button submit,takePic;
     private Spinner type,season,color,location;
+    private String imageFilePath;
+    private ImageView imageView;
 
     @Nullable
     @Override
@@ -51,43 +57,96 @@ public class AddItem extends android.support.v4.app.Fragment implements View.OnC
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        submit = (Button)view.findViewById(R.id.btn_submit);
+        submit = view.findViewById(R.id.btn_submit);
         submit.setOnClickListener(this);
-        takePic = (Button)view.findViewById(R.id.btn_take_picture);
+
+        takePic = view.findViewById(R.id.btn_take_picture);
         takePic.setOnClickListener(this);
 
-        type = (Spinner)view.findViewById(R.id.apparel_spinner);
+        imageView = view.findViewById(R.id.image_preview);
+
+        type = view.findViewById(R.id.apparel_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.type_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         type.setAdapter(adapter);
 
-        season = (Spinner)view.findViewById(R.id.season_spinner);
+        season = view.findViewById(R.id.season_spinner);
         adapter = ArrayAdapter.createFromResource(getActivity(), R.array.season_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         season.setAdapter(adapter);
 
-        color = (Spinner)view.findViewById(R.id.item_color_spinner);
+        color = view.findViewById(R.id.item_color_spinner);
         adapter = ArrayAdapter.createFromResource(getActivity(), R.array.colors_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         color.setAdapter(adapter);
 
-        location = (Spinner)view.findViewById(R.id.location_spinner);
+        location = view.findViewById(R.id.location_spinner);
         adapter = ArrayAdapter.createFromResource(getActivity(), R.array.location_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         location.setAdapter(adapter);
     }
 
     @Override
+    public void onClick(View view) {
+        if(view == submit){
+            if(valuesSet()){
+                uploadItem();
+                Toast.makeText(getActivity(), "Upload Successful",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getActivity(), "Please enter all fields", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        if(view == takePic)
+            openCameraIntent();
+
+    }
+
+    private boolean valuesSet() {
+        return  imageView.getDrawable() != null && location.getSelectedItem().toString().length() > 0 &&
+                color.getSelectedItem().toString().length() > 0 && type.getSelectedItem().toString().length() > 0 &&
+                type.getSelectedItem().toString().length() > 0;
+    }
+
+    private void openCameraIntent() {
+        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if(pictureIntent.resolveActivity(getContext().getPackageManager()) != null){
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {}
+
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(getActivity(),"lwtech.itad230.it_wa_databaseconnection.provider", photoFile);
+                pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
+                startActivityForResult(pictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        File storageDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile("tempPicture",".jpg",storageDir);
+        imageFilePath = image.getAbsolutePath();
+        return image;
+    }
+
+
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            scaledBitmap = Bitmap.createScaledBitmap(imageBitmap, 160, 320, false);
-
-            Drawable drawBitmap = new BitmapDrawable(getResources(), scaledBitmap);
-            ImageView imageView = getActivity().findViewById(R.id.image_preview);
-            imageView.setImageDrawable(drawBitmap);
+            Glide.with(this).load(imageFilePath).into(imageView);
         }
+    }
+
+    private Bitmap getBitmapFromFile(){
+        Bitmap img = BitmapFactory.decodeFile(imageFilePath);
+        File file = new File(imageFilePath);
+        file.delete();
+        return img;
     }
 
     private String imageToString(Bitmap bitmap) {
@@ -117,14 +176,14 @@ public class AddItem extends android.support.v4.app.Fragment implements View.OnC
 
         {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams(){
                 Map<String,String> params = new HashMap<>();
-                params.put("user_id", Integer.toString(SharedPrefManager.getInstance(getActivity()).getUserId()));
+                params.put("user_id",Integer.toString(SharedPrefManager.getInstance(getActivity()).getUserId()));
                 params.put("color",color.getSelectedItem().toString());
                 params.put("apparel_type",type.getSelectedItem().toString());
                 params.put("season",season.getSelectedItem().toString());
                 params.put("location",location.getSelectedItem().toString());
-                params.put("image",imageToString(scaledBitmap));
+                params.put("image",imageToString(getBitmapFromFile()));
                 return params;
             }
         };
@@ -132,30 +191,6 @@ public class AddItem extends android.support.v4.app.Fragment implements View.OnC
         RequestHandler.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
 
-    @Override
-    public void onClick(View view) {
-        if(view == submit){
-            if(scaledBitmap == null || location.getSelectedItem().toString().length() <= 0 ||
-                    color.getSelectedItem().toString().length() <= 0 || type.getSelectedItem().toString().length() <= 0 ||
-                    type.getSelectedItem().toString().length() <= 0){
-                Toast.makeText(getActivity(), "Please enter all fields", Toast.LENGTH_LONG).show();
-
-            } else {
-                uploadItem();
-                Toast.makeText(getActivity(), "Upload Successful",
-                        Toast.LENGTH_LONG).show();
-                //startActivity(new Intent(getApplicationContext(), AddItem.class));
-            }
-
-        }
-
-        if(view == takePic) {
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if(takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
-        }
-    }
 }
 
 
