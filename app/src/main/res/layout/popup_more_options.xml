@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp"
+    android:paddingTop="25dp"
+    android:paddingBottom="25dp"
+    android:orientation="vertical"
+    android:background="@drawable/popupborder"
+    >
+
+
+    <RadioGroup
+        android:id="@+id/radioScreenMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:id="@+id/removeOutfit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            style="@style/radioTitle"
+            android:text="Remove Outfit" />
+
+        <RadioButton
+            android:id="@+id/clearTravelList"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            style="@style/radioTitle"
+            android:layout_height="wrap_content"
+            android:text="Clear Travel List" />
+
+        <RadioButton
+            android:id="@+id/clearDonationList"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            style="@style/radioTitle"
+            android:layout_height="wrap_content"
+            android:text="Clear Donation List" />
+
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnOk"
+            android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:text="Ok"
+            android:layout_marginRight="20dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"/>
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:text="Cancel"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"/>
+    </LinearLayout>
+
+</LinearLayout>
