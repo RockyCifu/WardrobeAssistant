@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
@@ -60,8 +61,10 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     private int displayStatus = 0;
 
     private Fragment fragment;
-    private FragmentManager fragmentManager = getSupportFragmentManager();
-    private FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+
+    private EditText editOutfitName;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -101,7 +104,6 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        Fragment fragment = null;
         int id = item.getItemId();
 
         if (id == R.id.add)
@@ -110,18 +112,35 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         }
         else if (id == R.id.browseWardrobe)
         {
+            SharedPrefManager.getInstance(getApplicationContext()).setMenuOptionSelected("filter");
             popUpWindowForFilterType();
         }
-        else if (id == R.id.assembleOutfit) {
+        else if (id == R.id.createOutfit) {
+            SharedPrefManager.getInstance(getApplicationContext()).setMenuOptionSelected("create_outfit");
+            popUpWindowForOutfitName();
+
+        } else if (id == R.id.viewOutfit) {
+            SharedPrefManager.getInstance(getApplicationContext()).setMenuOptionSelected("view_outfit");
+            //Ashly's code goes here.
+            fragment = new BrowseOutfits();
+
 
         } else if (id == R.id.browseWishList) {
 
         } else if (id == R.id.ManageDonation) {
+            SharedPrefManager.getInstance(getApplicationContext()).setMenuOptionSelected("donation_list");
+            fragment = new BrowseWardrobe();
+
 
         } else if (id == R.id.manageTravel) {
+            SharedPrefManager.getInstance(getApplicationContext()).setMenuOptionSelected("travel_list");
+            fragment = new BrowseWardrobe();
 
-        }
-        else if (id == R.id.buttonLogOut) {
+        } else if (id == R.id.moreOptions) {
+            SharedPrefManager.getInstance(getApplicationContext()).setMenuOptionSelected("more_options");
+            popUpWindowForMoreOptions();
+
+        } else if (id == R.id.buttonLogOut) {
             SharedPrefManager.getInstance(getApplicationContext()).logOut();
             finish();
             startActivity(new Intent(this, MainActivity.class));
@@ -388,6 +407,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     {
 
         //read weather
+        SharedPrefManager.getInstance(getApplicationContext()).setMenuOptionSelected("filter");
         SharedPrefManager.getInstance(getApplicationContext()).setFilterType("season");
         SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Fall/Winter");
 
@@ -396,5 +416,151 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.screen_area, fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+    public void popUpWindowForOutfitName()
+    {
+        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = layoutInflater.inflate(R.layout.popup_outfit_name, null);
+        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        final PopupWindow popupWindow = new PopupWindow(popupView, popupView.getMeasuredWidth(), popupView.getMeasuredHeight(), true);
+        popupWindow.showAtLocation(popupView, Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setIgnoreCheekPress();
+
+        Button btnOk = popupView.findViewById(R.id.btnOk);
+        Button btnCancel = popupView.findViewById(R.id.btnCancel);
+
+         editOutfitName = popupView.findViewById(R.id.editOutfitName);
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String outfitName = editOutfitName.getText().toString().trim();
+                Toast.makeText(getApplicationContext(), "Name"+outfitName, Toast.LENGTH_SHORT).show();
+
+                if(outfitName.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Outfit name cannot be empty", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    popupWindow.dismiss();
+                    validateOutfitName(outfitName);
+                }
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+    }
+    private void validateOutfitName(String outfitName)
+    {
+        final String  outfit_name = outfitName;
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.POST,
+                Constants.URL_CREATEOUTFIT,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            if(!obj.getBoolean("error"))
+                            {
+                                Toast.makeText(getApplicationContext(), "Status true", Toast.LENGTH_SHORT).show();
+                                SharedPrefManager.getInstance(getApplicationContext()).setCurrentOutfitName(outfit_name);
+                                SharedPrefManager.getInstance(getApplicationContext()).setFilterType("None");
+                                SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("");
+                                fragment = new BrowseWardrobe();
+                                fragmentManager = getSupportFragmentManager();
+                                fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.replace(R.id.screen_area, fragment);
+                                fragmentTransaction.commit();
+                            }
+                            else
+                            {
+                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        )
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("operation","validity");
+                params.put("outfit_name", outfit_name);
+                params.put("user_id",Integer.toString(SharedPrefManager.getInstance(getApplicationContext()).getUserId()));
+                return params;
+            }
+        };
+        RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
+    }
+
+    public void popUpWindowForMoreOptions()
+    {
+        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = layoutInflater.inflate(R.layout.popup_more_options, null);
+        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        final PopupWindow popupWindow = new PopupWindow(popupView, popupView.getMeasuredWidth(), popupView.getMeasuredHeight(), true);
+        popupWindow.showAtLocation(popupView, Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setIgnoreCheekPress();
+
+        Button btnOk = popupView.findViewById(R.id.btnOk);
+        Button btnCancel = popupView.findViewById(R.id.btnCancel);
+
+        mFilterType = popupView.findViewById(R.id.radioScreenMode);
+        mFilterType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.removeOutfit: {
+                        Toast.makeText(getApplicationContext(), "Remove Outfit", Toast.LENGTH_SHORT).show();
+                    }break;
+                    case R.id.clearTravelList: {
+                        Toast.makeText(getApplicationContext(), "Remove Travel", Toast.LENGTH_SHORT).show();
+                    }break;
+                    case R.id.clearDonationList: {
+                        Toast.makeText(getApplicationContext(), "Remove Donation", Toast.LENGTH_SHORT).show();
+                    }    break;
+                    default:
+                        break;
+                }
+            }
+        });
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
     }
 }

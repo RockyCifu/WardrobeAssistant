@@ -4,14 +4,18 @@
         android:title="Add Item" />
     <item android:id="@+id/browseWardrobe"
         android:title="Filter"/>
-    <item android:id="@+id/assembleOutfit"
-        android:title="Assemble Outfit"/>
+    <item android:id="@+id/createOutfit"
+        android:title="Create Outfit"/>
+    <item android:id="@+id/viewOutfit"
+        android:title="View Outfit"/>
     <item android:id="@+id/browseWishList"
         android:title="Wish List"/>
     <item android:id="@+id/ManageDonation"
         android:title="Donation List"/>
     <item android:id="@+id/manageTravel"
         android:title="Travel List"/>
+    <item android:id="@+id/moreOptions"
+        android:title="More Options"/>
     <item android:id="@+id/buttonLogOut"
         android:title="Log Out"/>
 

@@ -13,6 +13,11 @@ public class SharedPrefManager {
     private static final String KEY_FILTERTYPE = "filter_type";
     private static final String KEY_FILTERVALUE= "filter_value";
     private static final String KEY_DISPLAYSTATUS = "set_display";
+    private static final String KEY_IMAGEPATH = "image_path";
+    private static final String KEY_IMAGEID= "image_id";
+    private static final String KEY_MENUOPTION = "menu_option";
+    private static final String KEY_OUTFITNAME = "outfit_name";
+    private static final String KEY_OUTFIT = "outfit";
 
     private SharedPrefManager(Context context) {
         mCtx = context;
@@ -86,5 +91,72 @@ public class SharedPrefManager {
         return sharedPreferences.getString(KEY_FILTERVALUE, null);
     }
 
+    public void setCurrentImagePath(String value)
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_IMAGEPATH, value);
+        editor.apply();
+    }
+    public void setCurrentImageId(int value)
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_IMAGEID, String.valueOf(value));
+        editor.apply();
+    }
+
+    public String getCurrentImagePath()
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_IMAGEPATH, null);
+    }
+    public String getCurrentImageId()
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_IMAGEID, null);
+    }
+
+    public void setMenuOptionSelected(String value)
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_MENUOPTION, String.valueOf(value));
+        editor.apply();
+    }
+
+    public String getMenuOptionSelected()
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_MENUOPTION, null);
+    }
+
+    public void setCurrentOutfitName(String value)
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_OUTFITNAME, String.valueOf(value));
+        editor.apply();
+    }
+
+    public String getCurrentOutfitName()
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_OUTFITNAME, null);
+    }
+
+    public void setCurrentOutfit(String value)
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_OUTFIT, String.valueOf(value));
+        editor.apply();
+    }
+
+    public String getCurrentOutfit()
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_OUTFIT, null);
+    }
 
 }

@@ -8,5 +8,8 @@ public class Constants {
     public static final String URL_ADDITEM = ROOT_URL+"add_Item.php";
     public static final String URL_BROWSEWARDROBE = ROOT_URL+"filter_design.php";
     public static final String URL_LAST_VIEWED = ROOT_URL+"last_viewed.php";
+    public static final String URL_ADDLIST = ROOT_URL+"add_list.php";
+    public static final String URL_READLIST = ROOT_URL+"read_list.php";
+    public static final String URL_CREATEOUTFIT = ROOT_URL+"outfit_create.php";
 }
 
