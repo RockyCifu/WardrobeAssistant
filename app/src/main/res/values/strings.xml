@@ -48,4 +48,12 @@
 
     <string name="open">Open</string>
     <string name="close">Close</string>
+
+    <string name="waPhaseTwoTitle">Wardrobe Assistant 2.0</string>
+    <string name="phaseTwo">Accessibility via Speech Recognition \n
+                           Password Recovery \n
+                           Color Match Feature \n
+                           Color Scheme Options \n
+                           Wish List Feature \n
+                           Social Connect Feature \n</string>
 </resources>

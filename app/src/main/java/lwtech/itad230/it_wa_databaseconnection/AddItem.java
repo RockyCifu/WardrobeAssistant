@@ -1,9 +1,10 @@
 package lwtech.itad230.it_wa_databaseconnection;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,7 +21,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -44,7 +45,7 @@ public class AddItem extends android.support.v4.app.Fragment implements View.OnC
     private String phpUrl = Constants.URL_ADDITEM;
     private Button submit,takePic;
     private Spinner type,season,color,location;
-    private String imageFilePath;
+    private static String imageFilePath;
     private ImageView imageView;
 
     @Nullable
@@ -144,9 +145,60 @@ public class AddItem extends android.support.v4.app.Fragment implements View.OnC
 
     private Bitmap getBitmapFromFile(){
         Bitmap img = BitmapFactory.decodeFile(imageFilePath);
+        img = fixOrientation(img);
+
         File file = new File(imageFilePath);
         file.delete();
-        return img;
+
+        return resizedBitmap(img, 480, 640);
+    }
+
+    private static Bitmap fixOrientation(Bitmap image){
+        ExifInterface ei = null;
+        try {
+            ei = new ExifInterface(imageFilePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED);
+
+        switch(orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return rotateImage(image, 90);
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return rotateImage(image, 180);
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return rotateImage(image, 270);
+            default:
+                return image;
+        }
+    }
+
+    private static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
+
+    private static Bitmap resizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // "RECREATE" THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+
+        return resizedBitmap;
     }
 
     private String imageToString(Bitmap bitmap) {

@@ -8,22 +8,25 @@
     android:orientation="vertical"
     android:gravity="center">
 
-    <ImageView
-        android:id="@+id/image_preview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-        android:layout_weight="1" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/location"
-        android:text="Location"
+        android:id="@+id/outfit_name"
         android:gravity="center"
         android:textSize="24sp"
         android:textAppearance="@style/ThemeOverlay.AppCompat.Dark"
-        android:textColor="@color/colorAccent"/>
+        android:textColor="#000000"
+        android:text="Test"
+        android:layout_marginTop="70dp"/>
+
+    <ImageView
+        android:id="@+id/outfit_logo"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/outfit_logo"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,54 +45,44 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/add_travel"
+                android:id="@+id/view_outfit"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/colorAccent"
-                android:text="ADD TO TRAVEL LIST"
+                android:text="VIEW"
                 style="@style/ButtonStyle"/>
 
             <Button
-                android:id="@+id/add_donation"
+                android:id="@+id/add_outfit"
                 android:layout_width="122dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/colorAccent"
-                android:text="ADD to DONATION LIST"
+                android:text="ADD"
                 style="@style/ButtonStyle"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/add_outfit"
+                android:id="@+id/delete_outfit"
                 android:layout_width="123dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                android:background="@color/colorAccent"
-                android:text="ADD TO OUTFIT"
-                style="@style/ButtonStyle"/>
-
-            <Button
-                android:id="@+id/delete_item"
-                android:layout_width="122dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="30dp"
                 android:background="@color/colorPrimary"
                 android:text="DELETE"
                 style="@style/ButtonStyle"/>
+
         </LinearLayout>
     </LinearLayout>
 

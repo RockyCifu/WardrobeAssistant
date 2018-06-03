@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -26,8 +27,10 @@ import java.util.Map;
 
 public class ImageAction extends Fragment implements View.OnClickListener {
     private ImageView imageView;
-    private Button addTravelList, addDonationList,addOutfit;
-    private ImageView removeImage;
+    private Button addTravelList, addDonationList,addOutfit, removeImage;
+    String imagePath;
+    private TextView imageLocation;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,9 +43,13 @@ public class ImageAction extends Fragment implements View.OnClickListener {
 
         imageView = view.findViewById(R.id.image_preview);
 
-        String imagePath = SharedPrefManager.getInstance(getActivity()).getCurrentImagePath();
+        imagePath = SharedPrefManager.getInstance(getActivity()).getCurrentImagePath();
 
         Glide.with(this).load(imagePath).into(imageView);
+
+        imageLocation = view.findViewById(R.id.location);
+        imageLocation.setText("Location: "+SharedPrefManager.getInstance(getActivity()).getCurrentLocation());
+
 
         addTravelList = view.findViewById(R.id.add_travel);
         addTravelList.setOnClickListener(this);
@@ -53,32 +60,31 @@ public class ImageAction extends Fragment implements View.OnClickListener {
         addOutfit = view.findViewById(R.id.add_outfit);
         addOutfit.setOnClickListener(this);
 
-        //removeImage = view.findViewById(R.id.image_delete);
-        //removeImage.setOnClickListener(this);
+        removeImage = view.findViewById(R.id.delete_item);
+        removeImage.setOnClickListener(this);
+
+        dateUpdate(imagePath);
     }
     @Override
     public void onClick(View view) {
         if(view == addTravelList)
         {
-            //Toast.makeText(getActivity(), "Travel", Toast.LENGTH_LONG).show();
             addToList("travel_list");
         }
 
         if(view == addDonationList)
         {
-            //Toast.makeText(getActivity(), "Donation", Toast.LENGTH_LONG).show();
             addToList("donation_list");
         }
 
         if(view == addOutfit)
         {
-            //Toast.makeText(getActivity(), "Outfit", Toast.LENGTH_LONG).show();
             addToOutfitList();
         }
 
         if(view == removeImage)
         {
-            Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
+            deleteItem();
         }
 
     }
@@ -89,15 +95,11 @@ public class ImageAction extends Fragment implements View.OnClickListener {
         final String list_type = list;
         final String item_id = SharedPrefManager.getInstance(getActivity()).getCurrentImageId();
 
-        //progressDialog.setMessage("Registering user...");
-        //progressDialog.show();
-
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constants.URL_ADDLIST,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                       // progressDialog.dismiss();
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             Toast.makeText(getActivity(), jsonObject.getString("message"),Toast.LENGTH_LONG).show();
@@ -109,7 +111,6 @@ public class ImageAction extends Fragment implements View.OnClickListener {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                       // progressDialog.dismiss();
                         Toast.makeText(getActivity(), error.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 }) {
@@ -129,19 +130,14 @@ public class ImageAction extends Fragment implements View.OnClickListener {
     private void addToOutfitList()
     {
 
-        //final String list_type = list;
         final String item_id = SharedPrefManager.getInstance(getActivity()).getCurrentImageId();
         final String outfit_name = SharedPrefManager.getInstance(getActivity()).getCurrentOutfitName();
-        //progressDialog.setMessage("Registering user...");
-        //progressDialog.show();
-        Toast.makeText(getActivity(), outfit_name,Toast.LENGTH_LONG).show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constants.URL_CREATEOUTFIT,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // progressDialog.dismiss();
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             Toast.makeText(getActivity(), jsonObject.getString("message"),Toast.LENGTH_LONG).show();
@@ -153,7 +149,6 @@ public class ImageAction extends Fragment implements View.OnClickListener {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // progressDialog.dismiss();
                         Toast.makeText(getActivity(), error.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 }) {
@@ -167,8 +162,73 @@ public class ImageAction extends Fragment implements View.OnClickListener {
                 return params;
             }
         };
+        RequestHandler.getInstance(getActivity()).addToRequestQueue(stringRequest);
+    }
+
+    private void deleteItem()
+    {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                Constants.URL_DELETE_ITEM,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            Toast.makeText(getActivity(), jsonObject.getString("message"),Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getActivity(), error.getMessage(),Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("delete_type","delete_item");
+                params.put("image_path",imagePath);
+                params.put("user_id",Integer.toString(SharedPrefManager.getInstance(getActivity()).getUserId()));
+                return params;
+            }
+        };
 
         RequestHandler.getInstance(getActivity()).addToRequestQueue(stringRequest);
+    }
+
+    public void dateUpdate(String image_path) {
+        final String image_path_url = image_path;
+
+        StringRequest dateRequest = new StringRequest(Request.Method.POST, Constants.URL_LAST_VIEWED, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Toast.makeText(getActivity(), jsonObject.getString("message"),Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getActivity(), error.getMessage(),Toast.LENGTH_LONG).show();
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("image_path", image_path_url);
+
+                return params;
+            } };
+        RequestHandler.getInstance(getActivity()).addToRequestQueue(dateRequest);
     }
 
 }

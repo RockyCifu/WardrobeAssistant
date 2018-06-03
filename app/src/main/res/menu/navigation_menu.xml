@@ -16,6 +16,8 @@
         android:title="Travel List"/>
     <item android:id="@+id/moreOptions"
         android:title="More Options"/>
+    <item android:id="@+id/version2_0"
+        android:title="Version2.0"/>
     <item android:id="@+id/buttonLogOut"
         android:title="Log Out"/>
 

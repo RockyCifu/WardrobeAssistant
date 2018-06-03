@@ -1,6 +1,5 @@
 package lwtech.itad230.it_wa_databaseconnection;
 
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,20 +15,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.PopupWindow;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-//import android.widget.Toolbar;
 import android.support.v7.widget.Toolbar;
 
 import com.android.volley.AuthFailureError;
@@ -41,7 +35,6 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,16 +42,12 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
 
     private ProgressDialog progressDialog;
 
-    private static final String TAG = "MyActivity";
-
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
 
     private Toolbar mToolbar;
 
     private RadioGroup mFilterType, mFilterValue;
-
-    private int displayStatus = 0;
 
     private Fragment fragment;
     private FragmentManager fragmentManager;
@@ -72,17 +61,17 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        mToolbar = (Toolbar)findViewById(R.id.nav_action);
+        mToolbar = findViewById(R.id.nav_action);
         setSupportActionBar(mToolbar);
 
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawerLayout);
+        mDrawerLayout = findViewById(R.id.drawerLayout);
         mToggle = new ActionBarDrawerToggle(this,mDrawerLayout,R.string.open, R.string.close);
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         progressDialog = new ProgressDialog(this);
 
@@ -120,10 +109,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             popUpWindowForOutfitName();
 
         } else if (id == R.id.viewOutfit) {
-            SharedPrefManager.getInstance(getApplicationContext()).setMenuOptionSelected("view_outfit");
-            //Ashly's code goes here.
             fragment = new BrowseOutfits();
-
 
         } else if (id == R.id.browseWishList) {
 
@@ -140,10 +126,14 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             SharedPrefManager.getInstance(getApplicationContext()).setMenuOptionSelected("more_options");
             popUpWindowForMoreOptions();
 
-        } else if (id == R.id.buttonLogOut) {
-            SharedPrefManager.getInstance(getApplicationContext()).logOut();
-            finish();
-            startActivity(new Intent(this, MainActivity.class));
+        }
+        else if (id == R.id.version2_0) {
+            SharedPrefManager.getInstance(getApplicationContext()).setMenuOptionSelected("version2.0");
+            fragment = new Version2_0();
+
+        }else if (id == R.id.buttonLogOut) {
+
+            logout();
         }
         if(fragment != null)
         {
@@ -153,7 +143,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             fragmentTransaction.commit();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawerLayout);
+        DrawerLayout drawer =  findViewById(R.id.drawerLayout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -168,31 +158,26 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         popupWindow.setOutsideTouchable(true);
         popupWindow.setIgnoreCheekPress();
 
-        Button btnOk = (Button) popupView.findViewById(R.id.btnOk);
-        Button btnCancel = (Button) popupView.findViewById(R.id.btnCancel);
+        Button btnOk = popupView.findViewById(R.id.btnOk);
+        Button btnCancel =  popupView.findViewById(R.id.btnCancel);
 
-        mFilterType = (RadioGroup) popupView.findViewById(R.id.radioScreenMode);
+        mFilterType = popupView.findViewById(R.id.radioScreenMode);
         mFilterType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.filterNone: {
                         SharedPrefManager.getInstance(getApplicationContext()).setFilterType("None");
-                        Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                     }break;
                     case R.id.filterColor: {
                         SharedPrefManager.getInstance(getApplicationContext()).setFilterType("color");
-                        //SharedPrefManager.getInstance(getApplicationContext()).getFilterType();
-                        Toast.makeText(getApplicationContext(), "Filter color", Toast.LENGTH_SHORT).show();
                     }break;
                     case R.id.filterApparelType: {
                         SharedPrefManager.getInstance(getApplicationContext()).setFilterType("apparel_type");
-                        Toast.makeText(getApplicationContext(), "Filter type", Toast.LENGTH_SHORT).show();
                     }    break;
 
                     case R.id.filterSeason: {
                         SharedPrefManager.getInstance(getApplicationContext()).setFilterType("season");
-                        Toast.makeText(getApplicationContext(), "Filter season", Toast.LENGTH_SHORT).show();
                     }    break;
 
                     default:
@@ -228,16 +213,12 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     private void popUpWindowForFilterValue()
     {
         String filter_type = SharedPrefManager.getInstance(getApplicationContext()).getFilterType();
-        //if(filter_type != "None")
-        {
             LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View popupView = layoutInflater.inflate(R.layout.filter_color, null);
             switch (filter_type) {
-                case "color": {
-                    // Toast.makeText(getApplicationContext(), "Filter read color", Toast.LENGTH_SHORT).show();
+                case "color":
                     popupView = layoutInflater.inflate(R.layout.filter_color, null);
-                }    break;
-
+                   break;
                 case "apparel_type":
                     popupView = layoutInflater.inflate(R.layout.filter_apparel_type, null);
                     break;
@@ -246,27 +227,24 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                     break;
                 default:
                     break;
-
             }
-            //View popupView = layoutInflater.inflate(R.layout.filter_color, null);
             popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
             final PopupWindow popupWindow = new PopupWindow(popupView, popupView.getMeasuredWidth(), popupView.getMeasuredHeight(), true);
             popupWindow.showAtLocation(popupView, Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
             popupWindow.setOutsideTouchable(true);
             popupWindow.setIgnoreCheekPress();
 
-            Button btnOk = (Button) popupView.findViewById(R.id.btnOk);
-            Button btnCancel = (Button) popupView.findViewById(R.id.btnCancel);
-            //mFilterValue = (RadioGroup) popupView.findViewById(R.id.filterColorSelected);
+            Button btnOk = popupView.findViewById(R.id.btnOk);
+            Button btnCancel = popupView.findViewById(R.id.btnCancel);
             switch (filter_type) {
                 case "color":
-                    mFilterValue = (RadioGroup) popupView.findViewById(R.id.filterColorSelected);
+                    mFilterValue = popupView.findViewById(R.id.filterColorSelected);
                     break;
                 case "apparel_type":
-                    mFilterValue = (RadioGroup) popupView.findViewById(R.id.filterApparelTypeSelected);
+                    mFilterValue = popupView.findViewById(R.id.filterApparelTypeSelected);
                     break;
                 case "season":
-                    mFilterValue = (RadioGroup) popupView.findViewById(R.id.filterSeasonSelected);
+                    mFilterValue = popupView.findViewById(R.id.filterSeasonSelected);
                     break;
             }
             mFilterValue.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -276,104 +254,83 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                     switch (checkedId) {
                         case R.id.colorBlack: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Black");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.colorWhite: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("White");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.colorPurple: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Purple");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.colorViolet: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Violet");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.colorRed: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Red");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.colorPink: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Pink");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.colorOrange: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Orange");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.colorYellow: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Yellow");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.colorGreen: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Green");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.colorBlue: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Blue");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.typeHat: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Hat");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.typeDress: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Dress");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.typeSkirt: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Skirt");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.typePants: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Pants");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.typeShirt: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Shirt");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.typeCoat: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Coat");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.typeShoes: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Shoes");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.typeAccessory: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Accessory");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.seasonSpringSummer: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Spring/Summer");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
 
                         case R.id.seasonFallWinter: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Fall/Winter");
-                            // Toast.makeText(getApplicationContext(), "FilterNone", Toast.LENGTH_SHORT).show();
                         }    break;
-
 
                         default:
                             break;
@@ -400,7 +357,6 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                     popupWindow.dismiss();
                 }
             });
-        }
     }
 
     public void displayRecommendations()
@@ -445,7 +401,6 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             @Override
             public void onClick(View v) {
                 final String outfitName = editOutfitName.getText().toString().trim();
-                Toast.makeText(getApplicationContext(), "Name"+outfitName, Toast.LENGTH_SHORT).show();
 
                 if(outfitName.equals("")) {
                     Toast.makeText(getApplicationContext(), "Outfit name cannot be empty", Toast.LENGTH_SHORT).show();
@@ -464,6 +419,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             }
         });
     }
+
     private void validateOutfitName(String outfitName)
     {
         final String  outfit_name = outfitName;
@@ -477,7 +433,6 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                             JSONObject obj = new JSONObject(response);
                             if(!obj.getBoolean("error"))
                             {
-                                Toast.makeText(getApplicationContext(), "Status true", Toast.LENGTH_SHORT).show();
                                 SharedPrefManager.getInstance(getApplicationContext()).setCurrentOutfitName(outfit_name);
                                 SharedPrefManager.getInstance(getApplicationContext()).setFilterType("None");
                                 SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("");
@@ -534,14 +489,11 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
-                    case R.id.removeOutfit: {
-                        Toast.makeText(getApplicationContext(), "Remove Outfit", Toast.LENGTH_SHORT).show();
-                    }break;
                     case R.id.clearTravelList: {
-                        Toast.makeText(getApplicationContext(), "Remove Travel", Toast.LENGTH_SHORT).show();
+                        clearTravelList();
                     }break;
                     case R.id.clearDonationList: {
-                        Toast.makeText(getApplicationContext(), "Remove Donation", Toast.LENGTH_SHORT).show();
+                        clearDonationList();
                     }    break;
                     default:
                         break;
@@ -562,5 +514,114 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                 popupWindow.dismiss();
             }
         });
+    }
+
+    private void clearTravelList()
+    {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                Constants.URL_DELETE_ITEM,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            Toast.makeText(getApplicationContext(), jsonObject.getString("message"),Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(),Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("delete_type","clear_travel_list");
+                params.put("user_id",Integer.toString(SharedPrefManager.getInstance(getApplicationContext()).getUserId()));
+                return params;
+            }
+        };
+
+        RequestHandler.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+    }
+    private void clearDonationList()
+    {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                Constants.URL_DELETE_ITEM,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            Toast.makeText(getApplicationContext(), jsonObject.getString("message"),Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(),Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("delete_type","clear_donation_list");
+                params.put("user_id",Integer.toString(SharedPrefManager.getInstance(getApplicationContext()).getUserId()));
+                return params;
+            }
+        };
+
+        RequestHandler.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+    }
+
+    private void logout()
+    {
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.POST,
+                Constants.URL_LOGOUT,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            if(!obj.getBoolean("error"))
+                            {
+                                SharedPrefManager.getInstance(getApplicationContext()).logOut();
+                                finish();
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
+                            }
+                            else
+                            {
+                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        )
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+
+                return params;
+            }
+        };
+        RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
     }
 }

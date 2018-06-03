@@ -4,7 +4,6 @@ package lwtech.itad230.it_wa_databaseconnection;
  * Created by ashlyluse on 5/22/18.
  */
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -26,7 +25,6 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,7 +89,7 @@ public class BrowseOutfits extends android.support.v4.app.Fragment {
                 //When the user clicks on an outfit card,
                 //it opens a new window that shows the items in the outfit
                 SharedPrefManager.getInstance(getActivity()).setCurrentOutfit(outfitNames.get(position));
-                Fragment fragment = new BrowseWardrobe();
+                Fragment fragment = new OutfitAction();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.screen_area, fragment);

@@ -2,7 +2,6 @@ package lwtech.itad230.it_wa_databaseconnection;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,11 +11,10 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,14 +39,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(this, MainMenuActivity.class));
             return;
         }
-        editTextUsername = (EditText)findViewById(R.id.editTextUsername);
-        editTextPassword = (EditText)findViewById(R.id.editTextPassword);
+        editTextUsername = findViewById(R.id.editTextUsername);
+        editTextPassword = findViewById(R.id.editTextPassword);
 
         progressDialog = new ProgressDialog(this);
-        buttonRegister = (Button)findViewById(R.id.buttonRegister);
+        buttonRegister = findViewById(R.id.buttonRegister);
         buttonRegister.setOnClickListener(this);
 
-        buttonLogin  = (Button)findViewById(R.id.buttonLogin);
+        buttonLogin  = findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(this);
     }
     private void registerUser()
@@ -115,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         obj.getString("user_name")
                                 );
 
-                                /*Toast.makeText(getApplicationContext(),"Successfully Logged in",Toast.LENGTH_LONG).show();*/
                                 startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
                                 //Finish the activity because on clicking screen should not show the login screen
                                 finish();
@@ -156,9 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             registerUser();
         }
         if(view == buttonLogin) {
-            //startActivity(new Intent(this, LoginActivity.class));
             userLogin();
-
         }
     }
 }

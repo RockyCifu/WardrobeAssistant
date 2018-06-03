@@ -3,15 +3,15 @@ package lwtech.itad230.it_wa_databaseconnection;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,11 +33,11 @@ import java.util.Map;
 public class BrowseWardrobe extends android.support.v4.app.Fragment{
     private ArrayList<String> imagePaths = new ArrayList<>();
     private ArrayList<Integer> imageId = new ArrayList<>();
+    private ArrayList<String> location = new ArrayList<>();
     Fragment fragment_parent;
 
     Fragment fragment;
-    FragmentManager fragmentManager ;
-    //FragmentManager fragmentManager;
+    FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     private String menuOptionSelected = null;
 
@@ -74,6 +74,7 @@ public class BrowseWardrobe extends android.support.v4.app.Fragment{
                 //Add image path url to arraylist
                 imagePaths.add(temp.getString("image_path"));
                 imageId.add(temp.getInt("item_id"));
+                location.add(temp.getString("location"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -96,7 +97,6 @@ public class BrowseWardrobe extends android.support.v4.app.Fragment{
 
         recyclerView.setAdapter(adapter);
 
-
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new RecyclerTouchListener.ClickListener() {
 
             @Override
@@ -106,6 +106,7 @@ public class BrowseWardrobe extends android.support.v4.app.Fragment{
                 if(menuOptionSelected.equals("filter") || menuOptionSelected.equals("create_outfit")) {
                     SharedPrefManager.getInstance(getActivity()).setCurrentImagePath(imagePaths.get(position));
                     SharedPrefManager.getInstance(getActivity()).setCurrentImageId(imageId.get(position));
+                    SharedPrefManager.getInstance(getActivity()).setCurrentLocation(location.get(position));
                     fragment = new ImageAction();
                     fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentTransaction = fragmentManager.beginTransaction();
@@ -128,16 +129,11 @@ public class BrowseWardrobe extends android.support.v4.app.Fragment{
         final String filter_value = SharedPrefManager.getInstance(getActivity()).getFilterValue();
         final View view = current_view;
 
-        Toast.makeText(getActivity(), filter_type+" "+filter_value, Toast.LENGTH_SHORT).show();
-        //progressDialog.setMessage("Loading.....");
-        //progressDialog.show();
-
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constants.URL_BROWSEWARDROBE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                       // progressDialog.dismiss();
                         try {
                             JSONObject obj = new JSONObject(response);
                             if(!obj.getBoolean("error"))
@@ -156,7 +152,6 @@ public class BrowseWardrobe extends android.support.v4.app.Fragment{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //progressDialog.dismiss();
                         Toast.makeText(getActivity(), error.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 }) {
@@ -165,6 +160,7 @@ public class BrowseWardrobe extends android.support.v4.app.Fragment{
                 Map<String, String> params = new HashMap<>();
                 params.put("filter_type",filter_type);
                 params.put("filter_value",filter_value);
+                params.put("user_id",Integer.toString(SharedPrefManager.getInstance(getActivity()).getUserId()));
                 return params;
             }
         };
@@ -175,12 +171,7 @@ public class BrowseWardrobe extends android.support.v4.app.Fragment{
     private void getImagesFromServerForList(View current_view)
     {
         final String list_type = menuOptionSelected;
-        //final String filter_value = SharedPrefManager.getInstance(getActivity()).getFilterValue();
         final View view = current_view;
-
-        //Toast.makeText(getActivity(), filter_type+" "+filter_value, Toast.LENGTH_SHORT).show();
-        //progressDialog.setMessage("Loading.....");
-        //progressDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constants.URL_READLIST,
@@ -206,7 +197,6 @@ public class BrowseWardrobe extends android.support.v4.app.Fragment{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //progressDialog.dismiss();
                         Toast.makeText(getActivity(), error.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 }) {
@@ -223,20 +213,12 @@ public class BrowseWardrobe extends android.support.v4.app.Fragment{
     }
     private void getImagesFromServerForOutfit(View current_view)
     {
-        final String list_type = menuOptionSelected;
-        //final String filter_value = SharedPrefManager.getInstance(getActivity()).getFilterValue();
         final View view = current_view;
-
-        //Toast.makeText(getActivity(), filter_type+" "+filter_value, Toast.LENGTH_SHORT).show();
-        //progressDialog.setMessage("Loading.....");
-        //progressDialog.show();
-
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constants.URL_CREATEOUTFIT,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // progressDialog.dismiss();
                         try {
                             JSONObject obj = new JSONObject(response);
                             if(!obj.getBoolean("error"))
@@ -255,7 +237,6 @@ public class BrowseWardrobe extends android.support.v4.app.Fragment{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //progressDialog.dismiss();
                         Toast.makeText(getActivity(), error.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 }) {
@@ -270,38 +251,6 @@ public class BrowseWardrobe extends android.support.v4.app.Fragment{
         };
 
         RequestHandler.getInstance(getActivity()).addToRequestQueue(stringRequest);
-    }
-        public void dateUpdate(String image_path) {
-
-
-        final String image_path_url = image_path;
-
-        StringRequest dateRequest = new StringRequest(Request.Method.POST, Constants.URL_LAST_VIEWED, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    Toast.makeText(getActivity(), jsonObject.getString("message"),Toast.LENGTH_LONG).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getActivity(), error.getMessage(),Toast.LENGTH_LONG).show();
-                    }
-                }) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("image_path", image_path_url);
-
-                return params;
-            } };
-        RequestHandler.getInstance(getActivity()).addToRequestQueue(dateRequest);
     }
 
 }

@@ -18,6 +18,7 @@ public class SharedPrefManager {
     private static final String KEY_MENUOPTION = "menu_option";
     private static final String KEY_OUTFITNAME = "outfit_name";
     private static final String KEY_OUTFIT = "outfit";
+    private static final String KEY_LOCATION = "location";
 
     private SharedPrefManager(Context context) {
         mCtx = context;
@@ -157,6 +158,19 @@ public class SharedPrefManager {
     {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_OUTFIT, null);
+    }
+    public void setCurrentLocation(String value)
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_LOCATION, String.valueOf(value));
+        editor.apply();
+    }
+
+    public String getCurrentLocation()
+    {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_LOCATION, null);
     }
 
 }

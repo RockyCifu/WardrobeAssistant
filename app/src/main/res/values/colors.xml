@@ -2,9 +2,9 @@
 <resources>
     <color name="colorPrimary">#dcb4b0</color>
     <color name="colorPrimaryDark">#dcb4b0</color>
-    <color name="colorAccent">#da5381</color>
+    <color name="colorAccent">#c76161</color>
     <color name="colorWhite">#FFFFFF</color>
     <!--<color name="appName">#000059</color>-->
-    <color name="colorRadioButton">#000059</color>
-    <color name="colorPopup">#e0b5bd</color>
+    <color name="colorRadioButton">#c76161</color>
+    <color name="colorPopup">#FFFFFF</color>
 </resources>

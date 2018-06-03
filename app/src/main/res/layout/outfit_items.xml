@@ -6,7 +6,7 @@
     android:background="#ffd7d3">
 
     <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/OItemsRecyclerView"
         android:orientation="horizontal">
