@@ -111,8 +111,6 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         } else if (id == R.id.viewOutfit) {
             fragment = new BrowseOutfits();
 
-        } else if (id == R.id.browseWishList) {
-
         } else if (id == R.id.ManageDonation) {
             SharedPrefManager.getInstance(getApplicationContext()).setMenuOptionSelected("donation_list");
             fragment = new BrowseWardrobe();

@@ -8,8 +8,6 @@
         android:title="Create Outfit"/>
     <item android:id="@+id/viewOutfit"
         android:title="View Outfit"/>
-    <item android:id="@+id/browseWishList"
-        android:title="Wish List"/>
     <item android:id="@+id/ManageDonation"
         android:title="Donation List"/>
     <item android:id="@+id/manageTravel"
