@@ -25,18 +25,24 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class: Actions performed when user clicks on an image
+ */
 public class ImageAction extends Fragment implements View.OnClickListener {
     private ImageView imageView;
     private Button addTravelList, addDonationList,addOutfit, removeImage;
     String imagePath;
     private TextView imageLocation;
 
+    /* Method: Inflating XML Layout */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.image_action,null);
     }
 
+    /* Method: Setup of buttons and imageviews
+     * Also updates date on image */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -65,6 +71,9 @@ public class ImageAction extends Fragment implements View.OnClickListener {
 
         dateUpdate(imagePath);
     }
+
+    /* Method: Calls method and performs action.
+       dependant on which button was clicked */
     @Override
     public void onClick(View view) {
         if(view == addTravelList)
@@ -89,15 +98,17 @@ public class ImageAction extends Fragment implements View.OnClickListener {
 
     }
 
+    /* Method: Adds photo to List (specified by user) on the online server
+    *  by calling to PHP file URL_ADDLIST*/
     private void addToList(String list)
     {
-
         final String list_type = list;
         final String item_id = SharedPrefManager.getInstance(getActivity()).getCurrentImageId();
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constants.URL_ADDLIST,
                 new Response.Listener<String>() {
+                    /* Method: Provide success message if successful */
                     @Override
                     public void onResponse(String response) {
                         try {
@@ -109,11 +120,13 @@ public class ImageAction extends Fragment implements View.OnClickListener {
                     }
                 },
                 new Response.ErrorListener() {
+                    /* Provide error message if unsuccessful */
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(getActivity(), error.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 }) {
+            /* Method: adds paramaters into Map for access later*/
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -127,6 +140,8 @@ public class ImageAction extends Fragment implements View.OnClickListener {
         RequestHandler.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
 
+    /* Method: Adds photo to OutfitList on the online server
+        *  by calling to PHP file URL_CREATOUTFIT.*/
     private void addToOutfitList()
     {
 
@@ -136,6 +151,7 @@ public class ImageAction extends Fragment implements View.OnClickListener {
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constants.URL_CREATEOUTFIT,
                 new Response.Listener<String>() {
+                    /* Method: Provide success message if successful */
                     @Override
                     public void onResponse(String response) {
                         try {
@@ -147,11 +163,13 @@ public class ImageAction extends Fragment implements View.OnClickListener {
                     }
                 },
                 new Response.ErrorListener() {
+                    /* Provide error message if unsuccessful */
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(getActivity(), error.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 }) {
+            /* Method: adds paramaters into Map for access later*/
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -165,12 +183,15 @@ public class ImageAction extends Fragment implements View.OnClickListener {
         RequestHandler.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
 
+    /* Method: Delete photo from online server
+    *  by calling to PHP file URL_DELETE_ITEM*/
     private void deleteItem()
     {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constants.URL_DELETE_ITEM,
                 new Response.Listener<String>() {
+                    /* Method: Provide success message if successful */
                     @Override
                     public void onResponse(String response) {
                         try {
@@ -182,11 +203,13 @@ public class ImageAction extends Fragment implements View.OnClickListener {
                     }
                 },
                 new Response.ErrorListener() {
+                    /* Provide error message if unsuccessful */
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(getActivity(), error.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 }) {
+            /* Method: adds paramaters into Map for access later*/
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -200,10 +223,13 @@ public class ImageAction extends Fragment implements View.OnClickListener {
         RequestHandler.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
 
+    /* Method: Updating photo Last Viewed Date on the online server
+    *  by calling to PHP file URL_URL_LAST_VIEWED*/
     public void dateUpdate(String image_path) {
         final String image_path_url = image_path;
 
         StringRequest dateRequest = new StringRequest(Request.Method.POST, Constants.URL_LAST_VIEWED, new Response.Listener<String>() {
+            /* Method: Provide success message if successful */
             @Override
             public void onResponse(String response) {
                 try {
@@ -215,12 +241,14 @@ public class ImageAction extends Fragment implements View.OnClickListener {
             }
         },
                 new Response.ErrorListener() {
+                    /* Provide error message if unsuccessful */
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(getActivity(), error.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 }) {
 
+            /* Method: adds parameters into Map for access later*/
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();

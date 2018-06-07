@@ -1,5 +1,8 @@
 package lwtech.itad230.it_wa_databaseconnection;
 
+/**
+ * Class: PHP File Strings that access Online Database
+ */
 public class Constants {
     private static final String ROOT_URL = "http://wardrobe-assistant.icoolshow.net/IT_project/web_services/";
     public static final String URL_REGISTER = ROOT_URL+"register_user.php";

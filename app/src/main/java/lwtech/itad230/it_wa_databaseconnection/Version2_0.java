@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * Class that displays Version 2.0 Features List
+ */
 public class Version2_0 extends android.support.v4.app.Fragment {
 
     @Nullable

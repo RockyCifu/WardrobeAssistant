@@ -2,6 +2,8 @@ package lwtech.itad230.it_wa_databaseconnection;
 
 /**
  * Created by ashlyluse on 5/22/18.
+ * Class that displays cardviews of each outfit
+ * Allows the user to tap single cardviews to view the outfit's items
  */
 
 import android.os.Bundle;
@@ -37,18 +39,21 @@ public class BrowseOutfits extends android.support.v4.app.Fragment {
     //the recyclerview
     RecyclerView outfitsView;
 
+    /* Method: inflates XML layout display */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.outfits,null);
     }
 
+    /* Method: calls generateOutfits method to populate Outfit Cards with data */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         generateOutfits(view);
     }
 
+    /* Method: Creates Outfit Cards*/
     public void displayOutfits(View view,  JSONObject obj) {
         //initializing the array of Outfit Cards
         ArrayList<OutfitCards> OUTFITS = new ArrayList<>();
@@ -66,6 +71,7 @@ public class BrowseOutfits extends android.support.v4.app.Fragment {
                 temp = new JSONObject(obj.getString("row"+i));
                 //Add image path url to arraylist
                 outfitNames.add(temp.getString("outfit_name"));
+                //Create outfit cards
                 OUTFITS.add(new OutfitCards(i+1, temp.getString("outfit_name"), R.drawable.layer4));
 
 
@@ -83,11 +89,12 @@ public class BrowseOutfits extends android.support.v4.app.Fragment {
         //setting adapter to recyclerview
         outfitsView.setAdapter(adapter);
 
+        /* Method that adds listener for when the user taps the card */
         outfitsView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), outfitsView, new RecyclerTouchListener.ClickListener() {
+            /* Method: When the user clicks on an outfit card,
+            it opens a new window that shows options for the outfit (view, delete, add) */
             @Override
             public void onClick(View view, int position) {
-                //When the user clicks on an outfit card,
-                //it opens a new window that shows the items in the outfit
                 SharedPrefManager.getInstance(getActivity()).setCurrentOutfit(outfitNames.get(position));
                 Fragment fragment = new OutfitAction();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -102,6 +109,10 @@ public class BrowseOutfits extends android.support.v4.app.Fragment {
         }));
     }
 
+    /* Method: populates Outfit Cards with data from the server
+       by calling to PHP file URL_CREATEOUTFIT and getting a JSONObject.
+       If successful, it passes the object to displayOutfit Method
+     */
     public void generateOutfits(View currentView) {
 
         final View view = currentView;
@@ -128,12 +139,14 @@ public class BrowseOutfits extends android.support.v4.app.Fragment {
                     }
                 },
                 new Response.ErrorListener() {
+                    /* Method: Giving error message if error happens */
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         //progressDialog.dismiss();
                         Toast.makeText(getActivity(), error.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 }) {
+            /* Method: adds paramaters into Map for access later*/
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
