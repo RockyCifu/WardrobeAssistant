@@ -53,7 +53,11 @@ public class BrowseOutfits extends android.support.v4.app.Fragment {
         generateOutfits(view);
     }
 
-    /* Method: Creates Outfit Cards*/
+    /**
+     * displayOutfits: Creates Outfit Cards
+     * @param view
+     *        obj - Json object has outfit information
+    */
     public void displayOutfits(View view,  JSONObject obj) {
         //initializing the array of Outfit Cards
         ArrayList<OutfitCards> OUTFITS = new ArrayList<>();
@@ -109,9 +113,11 @@ public class BrowseOutfits extends android.support.v4.app.Fragment {
         }));
     }
 
-    /* Method: populates Outfit Cards with data from the server
-       by calling to PHP file URL_CREATEOUTFIT and getting a JSONObject.
-       If successful, it passes the object to displayOutfit Method
+    /**
+     *  Method: populates Outfit Cards with data from the server
+     *  by calling to PHP file URL_CREATEOUTFIT and getting a JSONObject.
+     *  If successful, it passes the object to displayOutfit Method
+     *  @param currentView
      */
     public void generateOutfits(View currentView) {
 

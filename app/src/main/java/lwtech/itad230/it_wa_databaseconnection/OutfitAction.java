@@ -68,6 +68,7 @@ public class OutfitAction extends Fragment implements View.OnClickListener {
     /**
      * OnClick Method: Calls methods to perform users action request
      * depending on which button is clicked
+     * @param view
      */
     @Override
     public void onClick(View view) {
@@ -123,7 +124,7 @@ public class OutfitAction extends Fragment implements View.OnClickListener {
 
     /**
      * Method: Allows user to delete outfit
-     * Connects with online database and deletes outfit 
+     * Connects with online database and deletes outfit
      */
     private void deleteOutfit()
     {

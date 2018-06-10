@@ -34,15 +34,19 @@ public class ImageAction extends Fragment implements View.OnClickListener {
     String imagePath;
     private TextView imageLocation;
 
-    /* Method: Inflating XML Layout */
+    /**
+     *  Method: Inflating XML Layout
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.image_action,null);
     }
 
-    /* Method: Setup of buttons and imageviews
-     * Also updates date on image */
+    /**
+     *  Method: Setup of buttons and imageviews
+     * Also updates date on image
+     */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -72,8 +76,11 @@ public class ImageAction extends Fragment implements View.OnClickListener {
         dateUpdate(imagePath);
     }
 
-    /* Method: Calls method and performs action.
-       dependant on which button was clicked */
+    /**
+     * onClick: Calls method and performs action.
+     * dependant on which button was clicked
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         if(view == addTravelList)
@@ -98,8 +105,11 @@ public class ImageAction extends Fragment implements View.OnClickListener {
 
     }
 
-    /* Method: Adds photo to List (specified by user) on the online server
-    *  by calling to PHP file URL_ADDLIST*/
+    /**
+     *  addToList: Adds photo to List (specified by user) on the online server
+     *  by calling to PHP file URL_ADDLIST
+     *  @param list - contains list name
+     */
     private void addToList(String list)
     {
         final String list_type = list;
@@ -140,8 +150,10 @@ public class ImageAction extends Fragment implements View.OnClickListener {
         RequestHandler.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
 
-    /* Method: Adds photo to OutfitList on the online server
-        *  by calling to PHP file URL_CREATOUTFIT.*/
+    /**
+     *  addToOutfitList: Adds photo to OutfitList on the online server
+     *  by calling to PHP file URL_CREATOUTFIT.
+     */
     private void addToOutfitList()
     {
 
@@ -183,8 +195,10 @@ public class ImageAction extends Fragment implements View.OnClickListener {
         RequestHandler.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
 
-    /* Method: Delete photo from online server
-    *  by calling to PHP file URL_DELETE_ITEM*/
+    /**
+     * deleteItem: Delete photo from online server
+     *  by calling to PHP file URL_DELETE_ITEM
+     */
     private void deleteItem()
     {
 
@@ -223,8 +237,11 @@ public class ImageAction extends Fragment implements View.OnClickListener {
         RequestHandler.getInstance(getActivity()).addToRequestQueue(stringRequest);
     }
 
-    /* Method: Updating photo Last Viewed Date on the online server
-    *  by calling to PHP file URL_URL_LAST_VIEWED*/
+    /**
+     *  dateUpdate: Updating photo Last Viewed Date on the online server
+     *  by calling to PHP file URL_URL_LAST_VIEWED
+     *  @param image_path -  path where image is stored in server
+     */
     public void dateUpdate(String image_path) {
         final String image_path_url = image_path;
 
@@ -234,7 +251,7 @@ public class ImageAction extends Fragment implements View.OnClickListener {
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    Toast.makeText(getActivity(), jsonObject.getString("message"),Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(), jsonObject.getString("message"),Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -253,7 +270,7 @@ public class ImageAction extends Fragment implements View.OnClickListener {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("image_path", image_path_url);
-
+                params.put("user_id",Integer.toString(SharedPrefManager.getInstance(getActivity()).getUserId()));
                 return params;
             } };
         RequestHandler.getInstance(getActivity()).addToRequestQueue(dateRequest);

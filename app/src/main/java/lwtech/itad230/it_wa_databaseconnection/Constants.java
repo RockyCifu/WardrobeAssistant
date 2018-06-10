@@ -14,6 +14,5 @@ public class Constants {
     public static final String URL_READLIST = ROOT_URL+"read_list.php";
     public static final String URL_CREATEOUTFIT = ROOT_URL+"outfit_create.php";
     public static final String URL_DELETE_ITEM = ROOT_URL+"delete_item.php";
-    public static final String URL_LOGOUT = ROOT_URL+"logout.php";
 }
 

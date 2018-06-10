@@ -20,13 +20,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList<String> imagePaths = new ArrayList<>();
     private Context mContext;
 
-    /* Method: Setting context and List we're working with */
+    /**
+     *  RecyclerViewAdapter: Setting context and List we're working with
+     * @param context
+     *        imagePaths - array containing image paths
+     */
     public RecyclerViewAdapter(Context context, ArrayList<String> imagePaths){
         this.imagePaths = imagePaths;
         this.mContext = context;
     }
 
-    /* Method: Inflating XML Layout and creating a new ViewHolder */
+    /**
+     *  onCreateViewHolder: Inflating XML Layout and creating a new ViewHolder
+     * @param parent - ViewGroup
+     *        viewType - integer
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -34,7 +42,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return new ViewHolder(view);
     }
 
-    /* Method: Binding the image to the view holder to display image */
+    /**
+     * onBindViewHolder: Binding the image to the view holder to display image
+     * @param holder - ViewHolder
+     *        position - position in a array containing image paths
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
@@ -44,6 +56,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .into(holder.image);
     }
 
+    /**
+     * getItemCount - get the size of the array containing image paths
+     * @return size  - integer
+     */
     @Override
     public int getItemCount() {
         return imagePaths.size();

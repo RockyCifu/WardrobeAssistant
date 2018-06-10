@@ -1,5 +1,6 @@
 package lwtech.itad230.it_wa_databaseconnection;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.RadioGroup;
@@ -35,6 +37,9 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,9 +102,9 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
 
     /**
      * @Name onNavigationItemSelected
-     * @param item the destination the user selected
+     * @param: menu option the user selected
      * @return true
-     * # desc this method is executed upon selection of a menu option,
+     * #desc this method is executed upon selection of a menu option,
      * the necessary methods are executed that will send the user to the their desired location in the app
      */
     @Override
@@ -198,6 +203,10 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                         SharedPrefManager.getInstance(getApplicationContext()).setFilterType("season");
                     }    break;
 
+                    case R.id.filterDate: {
+                        SharedPrefManager.getInstance(getApplicationContext()).setFilterType("last_viewed");
+                    } break;
+
                     default:
                         break;
                 }
@@ -209,7 +218,6 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             public void onClick(View v) {
                 popupWindow.dismiss();
                 if(!SharedPrefManager.getInstance(getApplicationContext()).getFilterType().equals("None")) {
-                    Toast.makeText(getApplicationContext(), SharedPrefManager.getInstance(getApplicationContext()).getFilterType(), Toast.LENGTH_SHORT).show();
                     popUpWindowForFilterValue();
                 }
                 else {
@@ -252,6 +260,9 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                 case "season":
                     popupView = layoutInflater.inflate(R.layout.filter_season, null);
                     break;
+                case "last_viewed":
+                    popupView = layoutInflater.inflate(R.layout.filter_date, null);
+                    break;
                 default:
                     break;
             }
@@ -272,6 +283,9 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
                     break;
                 case "season":
                     mFilterValue = popupView.findViewById(R.id.filterSeasonSelected);
+                    break;
+                case "last_viewed":
+                    mFilterValue = popupView.findViewById(R.id.filterLastViewed);
                     break;
             }
             mFilterValue.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -357,6 +371,32 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
 
                         case R.id.seasonFallWinter: {
                             SharedPrefManager.getInstance(getApplicationContext()).setFilterValue("Fall/Winter");
+                        }    break;
+
+                        case R.id.date: {
+                            final Calendar c = Calendar.getInstance();
+                            int mYear = c.get(Calendar.YEAR); // current year
+                            int mMonth = c.get(Calendar.MONTH); // current month
+                            int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+                            // date picker dialog
+
+                            DatePickerDialog datePickerDialog = new DatePickerDialog(MainMenuActivity.this,
+                                    new DatePickerDialog.OnDateSetListener()  {
+
+
+                                        @Override
+                                        public void onDateSet(DatePicker view, int year,
+                                                              int monthOfYear, int dayOfMonth) {
+                                            // set day of month , month and year value
+                                            Calendar cal = new GregorianCalendar(year, monthOfYear, dayOfMonth);
+                                            SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+                                            String formatted = format1.format(cal.getTime());
+                                            SharedPrefManager.getInstance(getApplicationContext()).setFilterValue(formatted);
+                                        }
+                                    }, mYear, mMonth, mDay);
+
+                            datePickerDialog.show();
+
                         }    break;
 
                         default:
@@ -649,49 +689,12 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
 
     /**
      * @Name logout
-     * @desc generates a string jsonObject request to the php to disconnect the user from the database
+     * @desc method logs out the user and redirects s/he to login page
      */
     private void logout()
     {
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.POST,
-                Constants.URL_LOGOUT,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject obj = new JSONObject(response);
-                            if(!obj.getBoolean("error"))
-                            {
-                                SharedPrefManager.getInstance(getApplicationContext()).logOut();
-                                finish();
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-
-                            }
-                            else
-                            {
-                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                }
-        )
-        {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params = new HashMap<>();
-
-                return params;
-            }
-        };
-        RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
+        SharedPrefManager.getInstance(getApplicationContext()).logOut();
+        finish();
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 }

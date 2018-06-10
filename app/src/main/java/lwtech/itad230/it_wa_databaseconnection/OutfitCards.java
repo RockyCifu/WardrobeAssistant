@@ -11,24 +11,38 @@ public class OutfitCards {
     private String title;
     private int image;
 
-    /* Setting variables */
+    /**
+     *  OutfitCards - Constructor Setting variables
+     * @param id - integer
+     *        title - String
+     *        image - integer
+     */
     public OutfitCards(int id, String title, int image) {
         this.id = id;
         this.title = title;
         this.image = image;
     }
 
-    /* Method: getter for ID */
+    /**
+     *  getId: getter for ID
+     * @return id - integer
+     */
     public int getId() {
         return id;
     }
 
-    /* Method: getter for Title */
+    /**
+     *  getTitle: getter for Title
+     * @return title - String
+     */
     public String getTitle() {
         return title;
     }
 
-    /* Method: getter for Image */
+    /**
+     *  getImage: getter for Image
+     * @return image - integer
+     */
     public int getImage() {
         return image;
     }

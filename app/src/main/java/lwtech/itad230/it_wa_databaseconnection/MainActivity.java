@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Method that takes information given to us by user
+     * registerUser: Method that takes information given by the user
      * calls to the online database and registers the user
      * as a member of the app
      */
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Method that checks if username and password are correct,
+     * userLogin: Method that checks if username and password are correct,
      * and if so starts the MainMenuActivity giving the user
      * access to the app
      */
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Method that runs when a button is clicked.
+     * onClick: Method that runs when a button is clicked.
      * It calls a method to perform the request action,
      * depending on which button is clicked (determined by the id given
      */

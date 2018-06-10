@@ -36,13 +36,21 @@ public class OutfitsAdapter extends RecyclerView.Adapter<OutfitsAdapter.OutfitsV
     private List<OutfitCards> outfitsList;
     private Context mContext;
 
-    /* Method: Setting context and List we're working with */
+    /**
+     *  OutfitsAdapter: Setting context and List we're working with
+     * @param - context
+     *          outfitL - List
+     */
     public OutfitsAdapter(Context context, List<OutfitCards> outfitsL){
         this.outfitsList = outfitsL;
         this.mContext = context;
     }
 
-    /* Method: Inflating XML Layout and creating a new ViewHolder */
+    /**
+     *  OutfitsViewHolder: Inflating XML Layout and creating a new ViewHolder
+     * @param parent - ViewGroup
+     *        viewType - integer
+     */
     @NonNull
     @Override
     public OutfitsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -52,7 +60,11 @@ public class OutfitsAdapter extends RecyclerView.Adapter<OutfitsAdapter.OutfitsV
         return new OutfitsViewHolder(view);
     }
 
-    /* Method: Binding the information such as Title and Image to Outfit card */
+    /**
+     *  onBindViewHolder: Binding the information such as Title and Image to Outfit card
+     *  @param holder - OutfitsViewHolder
+     *         position - position in a array
+     */
     @Override
     public void onBindViewHolder(OutfitsViewHolder holder, int position) {
 
@@ -62,7 +74,11 @@ public class OutfitsAdapter extends RecyclerView.Adapter<OutfitsAdapter.OutfitsV
         holder.imageView.setImageDrawable(mContext.getResources().getDrawable(OUTFIT.getImage()));
     }
 
-    /* Method getting Outfit/card count */
+    /**
+     *  getItemCount: getting Outfit/card count
+     *  @return size - number of items in a outfit
+     */
+
     @Override
     public int getItemCount() {
         return outfitsList.size();
