@@ -24,18 +24,29 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class: Options given to the user when viewing an outfit
+ * And Methods for Actions performed when user clicks on buttons
+ */
 public class OutfitAction extends Fragment implements View.OnClickListener {
 
     TextView outfitName;
     Button viewOutfit,addOutfit,deleteOutfit;
     String outfit_name;
 
+    /**
+     * Method: Inflate Layout for page when on creation
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.outfit_action,null);
     }
 
+    /**
+     * Method: Sets up all buttons with the views
+     * And adds On Click Listener to buttons
+     */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -52,9 +63,12 @@ public class OutfitAction extends Fragment implements View.OnClickListener {
 
         deleteOutfit = view.findViewById(R.id.delete_outfit);
         deleteOutfit.setOnClickListener(this);
-
-
     }
+
+    /**
+     * OnClick Method: Calls methods to perform users action request
+     * depending on which button is clicked
+     */
     @Override
     public void onClick(View view) {
         if(view == viewOutfit)
@@ -77,6 +91,10 @@ public class OutfitAction extends Fragment implements View.OnClickListener {
 
     }
 
+    /**
+     * Method: Allows user to view outfit
+     * Replaces current fragment with BrowseWardrobe class as a fragment
+     */
     private void viewOutfit()
     {
         Fragment fragment = new BrowseWardrobe();
@@ -87,6 +105,10 @@ public class OutfitAction extends Fragment implements View.OnClickListener {
         fragmentTransaction.commit();
     }
 
+    /**
+     * Method: Allows user to go to wardrobe and add new items to outfit
+     * Replaces current fragment with BrowseWardrobe class as a fragment
+     */
     private void addToOutfit()
     {
         SharedPrefManager.getInstance(getActivity()).setFilterType("None");
@@ -99,6 +121,10 @@ public class OutfitAction extends Fragment implements View.OnClickListener {
         fragmentTransaction.commit();
     }
 
+    /**
+     * Method: Allows user to delete outfit
+     * Connects with online database and deletes outfit 
+     */
     private void deleteOutfit()
     {
         StringRequest stringRequest = new StringRequest(Request.Method.POST,

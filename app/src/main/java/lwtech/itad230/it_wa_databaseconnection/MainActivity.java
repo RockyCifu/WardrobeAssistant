@@ -21,12 +21,22 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Main Activity class that runs upon start of the app
+ * It holds all base functions for the app
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private EditText editTextUsername, editTextPassword;
     private Button buttonRegister, buttonLogin;
     private ProgressDialog progressDialog;
 
+    /**
+     * When Activity is created it proceeds to set the layout,
+     * and set up image and text views.
+     * It also sets on click listeners onto the buttons for
+     * logging in and registering
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +59,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonLogin  = findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(this);
     }
+
+    /**
+     * Method that takes information given to us by user
+     * calls to the online database and registers the user
+     * as a member of the app
+     */
     private void registerUser()
     {
 
@@ -61,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constants.URL_REGISTER,
                 new Response.Listener<String>() {
+                    /* Method: Provide success message if successful */
                     @Override
                     public void onResponse(String response) {
                         progressDialog.dismiss();
@@ -72,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
                 },
+                /* Provide error message if unsuccessful */
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -79,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(getApplicationContext(), error.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 }) {
+
+            /* Method: adds parameters into Map for access later*/
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -91,6 +111,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
     }
 
+    /**
+     * Method that checks if username and password are correct,
+     * and if so starts the MainMenuActivity giving the user
+     * access to the app
+     */
     private void userLogin()
     {
         final String username = editTextUsername.getText().toString()/*.trim()*/;
@@ -101,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Request.Method.POST,
                 Constants.URL_LOGIN,
                 new Response.Listener<String>() {
+                    /* Method: Provide success message if successful */
                     @Override
                     public void onResponse(String response) {
                         progressDialog.dismiss();
@@ -128,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 },
                 new Response.ErrorListener() {
+                    /* Provide error message if unsuccessful */
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.dismiss();
@@ -135,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
         )
         {
+            /* Method: adds parameters into Map for access later*/
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
@@ -146,6 +174,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
     }
 
+    /**
+     * Method that runs when a button is clicked.
+     * It calls a method to perform the request action,
+     * depending on which button is clicked (determined by the id given
+     */
     @Override
     public void onClick(View view)
     {

@@ -3,6 +3,9 @@ package lwtech.itad230.it_wa_databaseconnection;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+/**
+ * Class that contains all methods that are needed
+ */
 public class SharedPrefManager {
     private static SharedPrefManager mInstance;
     private static Context mCtx;
@@ -20,6 +23,10 @@ public class SharedPrefManager {
     private static final String KEY_OUTFIT = "outfit";
     private static final String KEY_LOCATION = "location";
 
+    /**
+     * SharedPrefManager Method; sets context for class
+     * @param context
+     */
     private SharedPrefManager(Context context) {
         mCtx = context;
     }
@@ -30,6 +37,7 @@ public class SharedPrefManager {
         }
         return mInstance;
     }
+
 
     public boolean userlogin(int user_id, String user_name)
     {
