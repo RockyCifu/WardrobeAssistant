@@ -12,16 +12,21 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+/**
+ * RecyclerView Adapter for Clothing items
+ */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<String> imagePaths = new ArrayList<>();
     private Context mContext;
 
+    /* Method: Setting context and List we're working with */
     public RecyclerViewAdapter(Context context, ArrayList<String> imagePaths){
         this.imagePaths = imagePaths;
         this.mContext = context;
     }
 
+    /* Method: Inflating XML Layout and creating a new ViewHolder */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -29,6 +34,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return new ViewHolder(view);
     }
 
+    /* Method: Binding the image to the view holder to display image */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
@@ -43,9 +49,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return imagePaths.size();
     }
 
+    /* Class: Object that contains and sets the image view */
     public class ViewHolder extends RecyclerView.ViewHolder{
         ImageView image;
 
+        /* Method: Setting XML Views */
         public ViewHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.image);

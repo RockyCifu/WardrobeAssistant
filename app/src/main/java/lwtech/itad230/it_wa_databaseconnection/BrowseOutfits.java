@@ -159,5 +159,5 @@ public class BrowseOutfits extends android.support.v4.app.Fragment {
 
         RequestHandler.getInstance(getActivity()).addToRequestQueue(stringRequest);
 
-        }
+    }
 }

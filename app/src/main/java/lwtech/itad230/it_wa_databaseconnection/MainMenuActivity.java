@@ -56,6 +56,11 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     private EditText editOutfitName;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    /**
+     * @Name OnCreate
+     * @desc the oncreate method instantiates all that is required for method operation,
+     * the displayRecommendations method is called to begin basic operation
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +95,13 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * @Name onNavigationItemSelected
+     * @param item the destination the user selected
+     * @return true
+     * # desc this method is executed upon selection of a menu option,
+     * the necessary methods are executed that will send the user to the their desired location in the app
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -145,6 +157,14 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    /**
+     * @Name popUpWindowForFilterType
+     * @desc This method generates a pop up window for selecting filter types,
+     * the filter types are displayed via radio button,
+     * upon selection of the ok button, the filter type will be set and the method for value type will be called and that pop up will execute
+     * the cancel button closes the pop up
+     */
     private void popUpWindowForFilterType()
     {
 
@@ -208,6 +228,15 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             }
         });
     }
+
+    /**
+     * @Name popUpWindowsForFilterValue
+     * @desc This method generates a pop up window allowing the user to set a filter in the display options,
+     * The pop generates with the radio selection of filter values and an ok and cancel button,
+     * upon selection of the type, the respective values to further thin the scope of the filter,
+     * on final confirmation the method replaces the current fragment with the new filter values and close the popup window,
+     * the Cancel button closes the pop up
+     */
     private void popUpWindowForFilterValue()
     {
         String filter_type = SharedPrefManager.getInstance(getApplicationContext()).getFilterType();
@@ -357,6 +386,11 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             });
     }
 
+    /**
+     * @Name displayRecommendations
+     * @desc This method produces the default display first shown upon log in,
+     * creates the fragment and displays tne selected filter, loops through when selection is reached
+     */
     public void displayRecommendations()
     {
 
@@ -380,6 +414,15 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             super.onBackPressed();
         }
     }
+
+    /**
+     * @Name popUpWindowForOutfitName
+     * @desc This method generates a popup window that takes user input for outfitName,
+     * The pop up allows the user to edit outfit name, confirm or cancel the page,
+     * on Ok selection, the string is tested, if empty, displays it cannot be empty, upon parameter being met,
+     * window closes and calls validateOutfitName method for check and execution,
+     * On cancel, window closes
+     */
     public void popUpWindowForOutfitName()
     {
         LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -418,6 +461,14 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         });
     }
 
+    /**
+     * @Name validateOutfitName
+     * @param outfitName string produced by user input on the name for the item selection
+     * @desc This method generates a string JsonObject request to test if a user genrerated name is valid,
+     * Posting to the createOutfit php via HashMap containing validity, user created outfit name, and user identification,
+     * if an error is not produced, the outfit_name will be set as current outfit name,
+     * replacing with new fragment.
+     */
     private void validateOutfitName(String outfitName)
     {
         final String  outfit_name = outfitName;
@@ -469,6 +520,12 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
     }
 
+    /**
+     * @Name popUpWindowForMoreOptions
+     * @desc This method generates a pop up window centered on the screen upon call with options to clear the current travel list or
+     * donation list through radio button selection, the pop up contains two buttons, 'Ok' and 'Cancel' Ok will execute a one of the clearing methods
+     * and close the pop up window. Cancel will close the pop up window.
+     */
     public void popUpWindowForMoreOptions()
     {
         LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -514,6 +571,11 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         });
     }
 
+    /**
+     * @Name clearTravelList
+     * @desc this method generates a string JsonObject request,
+     * posting information via HashMap to the php, clearing he current travel list based on user identification.
+     */
     private void clearTravelList()
     {
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
@@ -546,6 +608,12 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
 
         RequestHandler.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
     }
+
+    /**
+     * @Name clearDonationList
+     * @desc This method generates a string JsonObject request,
+     *posting information via Hashmap to the php clearing the current donation list by user identification.
+     */
     private void clearDonationList()
     {
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
@@ -579,6 +647,10 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         RequestHandler.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
     }
 
+    /**
+     * @Name logout
+     * @desc generates a string jsonObject request to the php to disconnect the user from the database
+     */
     private void logout()
     {
         StringRequest stringRequest = new StringRequest(
